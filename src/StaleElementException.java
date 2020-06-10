@@ -5,35 +5,37 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class StaleElementException {
 
-	public static void main(String[] args) {
+	@Test
+	public void validateAllSocialButtons(){
+		
 		WebDriverManager.chromedriver().setup();
 		
-		WebDriver driver= new ChromeDriver();
+		WebDriver driver = new ChromeDriver();
+		
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		
-		driver.manage().window().maximize();
 		driver.get("https://orangehrm-demo-6x.orangehrmlive.com");
-
-		List<WebElement> social_buttons = driver.findElements(By.xpath("//div[@class='outer hidden-xs']//div[contains(@class,'social-buttons')]/a"));
-	
-		for(WebElement social_button: social_buttons) {
-			social_button.click();
+		driver.manage().window().maximize();
+				
+		List<WebElement> social_buttons = driver.findElements(By.xpath("//div[@class='col-md-5']//div[contains(@class, 'social-buttons')]/a"));
+		
+		for(int i=0; i<social_buttons.size(); i++) {
+			//System.out.println(social_buttons.get(i).getAttribute("href"));
+			
+			social_buttons.get(i).click();
 			System.out.println(driver.getTitle());
-			
-			Assert.assertTrue(driver.getTitle().contains("OrangeHRM"), "Unexpected page found");
-			
 			driver.navigate().back();
-			social_buttons = driver.findElements(By.xpath("//div[@class='outer hidden-xs']//div[contains(@class,'social-buttons')]/a"));
-			
+			social_buttons = driver.findElements(By.xpath("//div[@class='col-md-5']//div[contains(@class, 'social-buttons')]/a"));
 		}
-			
-	
-	}
+		
+		driver.quit();
+		
+		}
 
 }
